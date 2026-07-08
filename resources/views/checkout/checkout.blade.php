@@ -10,17 +10,17 @@
             </div>
 
             @if(session('error'))
-                <div style="background: rgba(239, 68, 68, 0.1); color: var(--danger); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem;">
-                    <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+                <div style="background: rgba(239, 68, 68, 0.1); color: var(--danger); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+                    {{ session('error') }}
                 </div>
             @endif
 
             <div style="display: flex; gap: 2rem; background: var(--background); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 3rem; align-items: center;">
-                <div style="width: 150px; height: 150px; background: white; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #cbd5e1; border: 1px solid var(--border-color); overflow: hidden;">
+                <div style="width: 150px; height: 150px; background: var(--surface-2); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); overflow: hidden;">
                     @if($item->image_url)
                         <img src="{{ $item->image_url }}" style="width:100%; height:100%; object-fit:cover;">
                     @else
-                        <i class="fas {{ $type === 'equipment' ? 'fa-tools' : 'fa-box' }}"></i>
+                        <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-align: center; padding: 0.5rem;">No Image</div>
                     @endif
                 </div>
                 
@@ -70,15 +70,14 @@
                     </div>
                 @endif
 
-                <div style="background: rgba(245, 158, 11, 0.1); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 3rem; display: flex; gap: 1rem; border: 1px solid rgba(245, 158, 11, 0.2);">
-                    <i class="fas fa-info-circle" style="color: var(--warning); font-size: 1.5rem;"></i>
-                    <p style="font-size: 0.9rem; color: var(--warning); line-height: 1.6;">
+                <div style="background: rgba(245, 158, 11, 0.1); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 3rem; border: 1px solid rgba(245, 158, 11, 0.2);">
+                    <p style="font-size: 0.9rem; color: var(--warning); line-height: 1.6; margin:0;">
                         <strong>Catatan Pembayaran:</strong> Transaksi akan masuk ke tahap menunggu verifikasi penjual. Pembayaran dilakukan melalui COD atau metode yang disepakati setelah penjual menghubungi Anda.
                     </p>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.25rem; font-size: 1.1rem; justify-content: center; gap: 1rem;">
-                    <i class="fas fa-check-circle"></i> Selesaikan Pesanan
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.25rem; font-size: 1.1rem; justify-content: center;">
+                    Selesaikan Pesanan
                 </button>
             </form>
         </div>

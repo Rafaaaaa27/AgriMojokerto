@@ -14,8 +14,8 @@
         <div class="mobile-filter-overlay" id="mobileFilterOverlay" onclick="closeMobileFilter()"></div>
         <div class="mobile-filter-panel" id="mobileFilterPanel">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                <h3 style="font-weight: 800; font-size: 1.2rem; color: var(--text-main);"><i class="fas fa-filter" style="color: var(--primary);"></i> Filter Produk</h3>
-                <button onclick="closeMobileFilter()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fas fa-times"></i></button>
+                <h3 style="font-weight: 800; font-size: 1.2rem; color: var(--text-main);">Filter Produk</h3>
+                <button onclick="closeMobileFilter()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;" aria-label="Tutup">×</button>
             </div>
             <form action="{{ route('marketplace.index') }}" method="GET" id="mobileFilterForm">
                 <div style="margin-bottom: 2rem;">
@@ -45,8 +45,8 @@
         <!-- FILTERS -->
         <aside class="animate-fade" id="desktopFilters">
             <div class="glass-card" style="padding: 2rem; position: sticky; top: 8rem;">
-                <h3 style="font-weight: 800; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem;">
-                    <i class="fas fa-filter" style="color: var(--primary);"></i> Filter Produk
+                <h3 style="font-weight: 800; margin-bottom: 2rem;">
+                    Filter Produk
                 </h3>
                 
                 <form action="{{ route('marketplace.index') }}" method="GET">
@@ -81,12 +81,11 @@
         <main>
             <form method="GET" action="{{ route('marketplace.index') }}" style="margin-bottom: 2rem; display: flex; gap: 0.75rem; align-items: center;">
                 <div style="flex: 1; position: relative;">
-                    <i class="fas fa-search" style="position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari benih, pupuk, atau alat tani..." class="form-input" style="padding-left: 3.5rem; background: white; border-radius: 15px;">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari benih, pupuk, atau alat tani..." class="form-input" style="padding-left: 1.5rem; background: white; border-radius: 15px;">
                 </div>
                 <button type="submit" style="display:none;">Cari</button>
-                <button type="button" class="mobile-filter-btn btn btn-secondary" id="mobileFilterBtn" style="display:none; padding: 0.75rem 1rem; border-radius: 12px;" onclick="toggleMobileFilter()">
-                    <i class="fas fa-filter"></i>
+                <button type="button" class="mobile-filter-btn btn btn-secondary" id="mobileFilterBtn" style="display:none; padding: 0.75rem 1.5rem; border-radius: 12px;" onclick="toggleMobileFilter()">
+                    Filter
                 </button>
             </form>
 
@@ -107,8 +106,8 @@
                         <div class="product-footer">
                             <div class="product-price">Rp {{ number_format($product->price, 0, ',', '.') }}</div>
                             @if(!auth()->check() || auth()->user()->role !== 'admin')
-                                <a href="{{ route('checkout', ['type' => 'product', 'id' => $product->id]) }}" class="buy-btn">
-                                    <i class="fas fa-shopping-cart"></i>
+                                <a href="{{ route('checkout', ['type' => 'product', 'id' => $product->id]) }}" class="buy-btn" style="font-size:0.85rem; font-weight:700;">
+                                    Beli
                                 </a>
                             @else
                                 <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">View Mode</span>
@@ -284,8 +283,7 @@ function closeMobileFilter() {
         color: var(--primary);
     }
     .buy-btn {
-        width: 45px;
-        height: 45px;
+        padding: 0.6rem 1.2rem;
         background: var(--primary);
         color: white;
         border-radius: 12px;
@@ -298,7 +296,6 @@ function closeMobileFilter() {
     }
     .buy-btn:hover {
         background: var(--primary-dark);
-        transform: rotate(15deg);
     }
     .equipment-card {
         padding: 0;

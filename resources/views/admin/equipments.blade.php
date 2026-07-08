@@ -8,7 +8,7 @@
             <p style="color: var(--text-muted); font-size: 1.1rem;">Total {{ $equipments->total() }} alat berat dan tani terdaftar.</p>
         </div>
         <a href="{{ route('dashboard') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Kembali
+            Kembali
         </a>
     </div>
 
@@ -47,12 +47,12 @@
                             @if($eq->approval_status === 'pending')
                             <form action="{{ route('admin.equipment.approve', $eq->id) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-sm btn-primary" style="padding:0.4rem 0.8rem;"><i class="fas fa-check"></i></button>
+                                <button type="submit" class="btn btn-sm btn-primary" style="padding:0.4rem 0.8rem;">Setujui</button>
                             </form>
                             @endif
                             <form action="{{ route('admin.equipments.destroy', $eq->id) }}" method="POST" onsubmit="return confirm('Hapus alat ini secara permanen?')">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-secondary" style="padding:0.4rem 0.8rem; color: var(--danger);"><i class="fas fa-trash"></i></button>
+                                <button type="submit" class="btn btn-sm btn-secondary" style="padding:0.4rem 0.8rem; color: var(--danger);">Hapus</button>
                             </form>
                         </div>
                     </td>

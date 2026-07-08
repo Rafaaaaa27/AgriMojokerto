@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review {{ ucfirst($type) }} - AgriMojokerto</title>
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; margin: 0; padding: 2rem; }
         .review-container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
@@ -17,7 +16,7 @@
         .detail-label { font-weight: bold; color: #7f8c8d; }
         .detail-value { color: #2c3e50; font-weight: 600; }
         .actions { display: flex; gap: 1rem; margin-top: 2rem; justify-content: flex-end; }
-        .btn { padding: 0.8rem 1.5rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn { padding: 0.8rem 1.5rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; display: inline-flex; align-items: center; }
         .btn-approve { background: #27ae60; }
         .btn-approve:hover { background: #1e8449; }
         .btn-reject { background: #e74c3c; }
@@ -36,14 +35,14 @@
 
 <div class="review-container">
     <div class="header">
-        <h2 style="margin:0; color:#2c3e50;"><i class="fas fa-search"></i> Review Detail {{ ucfirst($type) }}</h2>
-        <a href="{{ route('dashboard') }}#approval-queue" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali ke Dashboard</a>
+        <h2 style="margin:0; color:#2c3e50;">Review Detail {{ ucfirst($type) }}</h2>
+        <a href="{{ route('dashboard') }}#approval-queue" class="back-btn">← Kembali ke Dashboard</a>
     </div>
 
     @if($item->image_path)
         <img src="{{ $item->image_url }}" class="item-image" alt="Item Image">
     @else
-        <div class="item-image"><i class="fas fa-image"></i></div>
+        <div class="item-image" style="color: #ccc;">Tidak Ada Gambar</div>
     @endif
 
     <div class="detail-row">
@@ -90,7 +89,7 @@
         <form action="{{ route('admin.' . $type . '.reject', $item->id) }}" method="POST" style="margin:0;">
             @csrf
             <button type="submit" class="btn btn-reject" onclick="return confirm('Yakin ingin MENOLAK item ini?');">
-                <i class="fas fa-times"></i> Tolak Layak
+                Tolak Layak
             </button>
         </form>
 
@@ -98,7 +97,7 @@
         <form action="{{ route('admin.' . $type . '.approve', $item->id) }}" method="POST" style="margin:0;">
             @csrf
             <button type="submit" class="btn btn-approve" onclick="return confirm('Yakin ingin MENYETUJUI item ini?');">
-                <i class="fas fa-check"></i> Setujui Item
+                Setujui Item
             </button>
         </form>
     </div>

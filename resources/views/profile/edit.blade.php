@@ -144,8 +144,8 @@
                         <p style="color: var(--text-muted);">Kelola katalog produk dan alat sewa Anda.</p>
                     </div>
                     <div style="display: flex; gap: 1rem;">
-                        <button onclick="openProductModal()" class="btn btn-primary"><i class="fas fa-plus"></i> Produk</button>
-                        <button onclick="openEquipmentModal()" class="btn btn-secondary"><i class="fas fa-plus"></i> Alat</button>
+                        <button onclick="openProductModal()" class="btn btn-primary">+ Produk</button>
+                        <button onclick="openEquipmentModal()" class="btn btn-secondary">+ Alat</button>
                     </div>
                 </div>
 
@@ -158,7 +158,7 @@
                             @if($prod->image_path)
                             <img src="{{ $prod->image_url }}" style="width: 100%; height: 100%; object-fit: cover;">
                             @else
-                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #ccc;"><i class="fas fa-image fa-2x"></i></div>
+                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #ccc; font-weight: 700; font-size: 0.8rem;">No Image</div>
                             @endif
                         </div>
                         <h4 style="font-weight: 800; margin-bottom: 0.25rem;">{{ $prod->name }}</h4>
@@ -172,10 +172,10 @@
                             <span style="color: var(--text-muted);">Stok: {{ $prod->quantity }}</span>
                         </div>
                         <div style="display: flex; gap: 0.5rem; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 1rem;">
-                            <button onclick="openProductModal({{ json_encode($prod) }})" class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                            <button onclick="openProductModal({{ json_encode($prod) }})" class="action-btn-icon" style="font-size:0.8rem; font-weight:700;">Edit</button>
                             <form action="{{ route('products.destroy', $prod->id) }}" method="POST" onsubmit="return confirm('Hapus produk ini?')">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="action-btn-icon action-btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                <button type="submit" class="action-btn-icon action-btn-danger" style="font-size:0.8rem; font-weight:700;">Hapus</button>
                             </form>
                         </div>
                     </div>
@@ -193,7 +193,7 @@
                             @if($eq->image_path)
                             <img src="{{ $eq->image_url }}" style="width: 100%; height: 100%; object-fit: cover;">
                             @else
-                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #ccc;"><i class="fas fa-tractor fa-2x"></i></div>
+                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #ccc; font-weight: 700; font-size: 0.8rem;">No Image</div>
                             @endif
                         </div>
                         <h4 style="font-weight: 800; margin-bottom: 0.25rem;">{{ $eq->name }}</h4>
@@ -207,10 +207,10 @@
                             <span style="color: var(--text-muted);">Jumlah: {{ $eq->quantity }}</span>
                         </div>
                         <div style="display: flex; gap: 0.5rem; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 1rem;">
-                            <button onclick="openEquipmentModal({{ json_encode($eq) }})" class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                            <button onclick="openEquipmentModal({{ json_encode($eq) }})" class="action-btn-icon" style="font-size:0.8rem; font-weight:700;">Edit</button>
                             <form action="{{ route('equipments.destroy', $eq->id) }}" method="POST" onsubmit="return confirm('Hapus alat sewa ini?')">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="action-btn-icon action-btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                <button type="submit" class="action-btn-icon action-btn-danger" style="font-size:0.8rem; font-weight:700;">Hapus</button>
                             </form>
                         </div>
                     </div>

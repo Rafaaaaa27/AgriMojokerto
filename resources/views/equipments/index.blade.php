@@ -74,10 +74,12 @@
         transition: transform 0.5s ease;
     }
     .eq-card:hover .eq-image img { transform: scale(1.06); }
-    .eq-image .eq-icon {
-        font-size: 5rem;
+    .eq-icon-placeholder {
+        font-size: 2.5rem;
+        font-weight: 900;
         color: var(--primary);
-        opacity: 0.4;
+        opacity: 0.5;
+        letter-spacing: 0.05em;
     }
     .eq-type-badge {
         position: absolute;
@@ -110,7 +112,7 @@
         gap: 0.4rem;
         margin-bottom: 0.4rem;
     }
-    .eq-meta i { color: var(--primary); width: 14px; text-align: center; }
+    .eq-meta::before { content: "•"; color: var(--primary); font-weight: 900; margin-right: 0.4rem; }
     .eq-price-row {
         display: flex;
         justify-content: space-between;
@@ -173,7 +175,7 @@
         border-radius: var(--radius-lg);
         border: 2px dashed var(--border-color);
     }
-    .empty-state i { font-size: 5rem; color: #cbd5e1; margin-bottom: 1.5rem; display: block; }
+
     .empty-state h3 { color: var(--primary-dark); font-size: 1.5rem; margin-bottom: 0.5rem; }
     .empty-state p { color: var(--text-muted); }
     .pagination-wrap { margin-top: 3rem; display: flex; justify-content: center; }
@@ -186,7 +188,7 @@
 <div class="hero-sub" style="text-align: center;">
     <div class="container animate-fade-up">
         <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 1rem;">
-            <i class="fas fa-tractor"></i> Penyewaan Alat Pertanian
+            Penyewaan Alat Pertanian
         </h1>
         <p style="font-size: 1.2rem; opacity: 0.85; max-width: 600px; margin: 0 auto;">
             Sewa alat pertanian modern dari petani dan penyedia lokal di sekitar Mojokerto.
@@ -200,7 +202,7 @@
     <form method="GET" action="{{ route('equipments.index') }}" id="equipmentFilterForm">
         <div class="eq-filter-card animate-fade">
             <div class="form-group">
-                <label><i class="fas fa-tools"></i> Jenis Alat</label>
+                <label>Jenis Alat</label>
                 <select name="type" onchange="document.getElementById('equipmentFilterForm').submit()">
                     <option value="all" {{ !request('type') || request('type') === 'all' ? 'selected' : '' }}>Semua Jenis</option>
                     <option value="traktor" {{ request('type') === 'traktor' ? 'selected' : '' }}>Traktor</option>
@@ -212,7 +214,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label><i class="fas fa-seedling"></i> Untuk Tanaman</label>
+                <label>Untuk Tanaman</label>
                 <select name="crop" onchange="document.getElementById('equipmentFilterForm').submit()">
                     <option value="all" {{ !request('crop') || request('crop') === 'all' ? 'selected' : '' }}>Semua Tanaman</option>
                     <option value="padi" {{ request('crop') === 'padi' ? 'selected' : '' }}>Padi</option>
@@ -220,7 +222,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label><i class="fas fa-map-marker-alt"></i> Lokasi</label>
+                <label>Lokasi</label>
                 <select name="location" onchange="document.getElementById('equipmentFilterForm').submit()">
                     <option value="all" {{ !request('location') || request('location') === 'all' ? 'selected' : '' }}>Semua Lokasi</option>
                     <option value="Mojokerto Kota" {{ request('location') === 'Mojokerto Kota' ? 'selected' : '' }}>Mojokerto Kota</option>
@@ -236,7 +238,7 @@
             @if(request('type') && request('type') !== 'all' || request('crop') && request('crop') !== 'all' || request('location') && request('location') !== 'all')
             <div>
                 <a href="{{ route('equipments.index') }}" class="btn btn-secondary" style="white-space:nowrap;">
-                    <i class="fas fa-times"></i> Reset
+                    Reset
                 </a>
             </div>
             @endif
@@ -246,46 +248,23 @@
     {{-- Equipment Grid --}}
     <div class="eq-grid">
         @forelse($equipments as $equipment)
-        @php
-            $icons = [
-                'traktor' => 'fa-tractor',
-                'Traktor' => 'fa-tractor',
-                'combine' => 'fa-truck-pickup',
-                'truk' => 'fa-truck',
-                'pemotong' => 'fa-cut',
-                'Drone' => 'fa-plane',
-                'drone' => 'fa-plane',
-                'Thresher' => 'fa-cog',
-                'thresher' => 'fa-cog',
-            ];
-            $icon = $icons[$equipment->type] ?? 'fa-tools';
-        @endphp
         <div class="eq-card animate-fade">
             <div class="eq-image">
                 @if($equipment->image_url)
                     <img src="{{ $equipment->image_url }}" alt="{{ $equipment->name }}">
                 @else
-                    <i class="fas {{ $icon }} eq-icon"></i>
+                    <div class="eq-icon-placeholder">{{ strtoupper(substr($equipment->type, 0, 2)) }}</div>
                 @endif
                 <span class="eq-type-badge">{{ ucfirst($equipment->type) }}</span>
             </div>
             <div class="eq-body">
                 <h3 class="eq-name">{{ $equipment->name }}</h3>
                 @if($equipment->location)
-                <div class="eq-meta">
-                    <i class="fas fa-map-marker-alt"></i>
-                    {{ $equipment->location }}
-                </div>
+                <div class="eq-meta">{{ $equipment->location }}</div>
                 @endif
-                <div class="eq-meta">
-                    <i class="fas fa-user"></i>
-                    {{ $equipment->user->name ?? 'Penyedia Alat' }}
-                </div>
+                <div class="eq-meta">{{ $equipment->user->name ?? 'Penyedia Alat' }}</div>
                 @if($equipment->phone)
-                <div class="eq-meta">
-                    <i class="fas fa-phone"></i>
-                    {{ $equipment->phone }}
-                </div>
+                <div class="eq-meta">{{ $equipment->phone }}</div>
                 @endif
                 @if($equipment->description)
                 <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.75rem; line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
@@ -300,11 +279,11 @@
                     </div>
                     @auth
                         <a href="{{ route('checkout', ['type' => 'equipment', 'id' => $equipment->id]) }}" class="btn-sewa">
-                            <i class="fas fa-calendar-check"></i> Sewa
+                            Sewa
                         </a>
                     @else
                         <a href="{{ route('login') }}" class="btn-login-sewa">
-                            <i class="fas fa-sign-in-alt"></i> Login
+                            Login
                         </a>
                     @endauth
                 </div>
@@ -312,12 +291,11 @@
         </div>
         @empty
         <div class="empty-state">
-            <i class="fas fa-tractor"></i>
             <h3>Tidak ada alat yang tersedia</h3>
             <p>Coba ubah filter atau cek kembali nanti.</p>
             @if(request('type') || request('crop') || request('location'))
                 <a href="{{ route('equipments.index') }}" class="btn btn-primary" style="margin-top:1.5rem; display:inline-flex;">
-                    <i class="fas fa-times"></i> Reset Filter
+                    Reset Filter
                 </a>
             @endif
         </div>
