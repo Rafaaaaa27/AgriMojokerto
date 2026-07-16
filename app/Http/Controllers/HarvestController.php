@@ -10,7 +10,15 @@ class HarvestController extends Controller
     public function index()
     {
         $harvests = Harvest::where('user_id', auth()->id())->latest()->get();
-        return view('harvest.index', compact('harvests'));
+        $harvestsJson = $harvests->map(fn($h) => [
+            'id' => $h->id,
+            'crop_type' => $h->crop_type,
+            'harvest_date' => $h->harvest_date->format('Y-m-d'),
+            'quantity' => $h->quantity,
+            'unit' => $h->unit,
+            'notes' => $h->notes,
+        ])->keyBy('id');
+        return view('harvest.index', compact('harvests', 'harvestsJson'));
     }
 
     public function store(Request $request)

@@ -35,8 +35,8 @@
         border-radius: var(--radius-md);
         font-size: 0.9rem;
         font-family: inherit;
-        color: var(--primary-dark);
-        background: white;
+        color: var(--text-main);
+        background: var(--surface);
         outline: none;
         transition: border-color 0.2s;
     }
@@ -60,7 +60,7 @@
     }
     .eq-image {
         height: 210px;
-        background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        background: var(--surface-2);
         display: flex;
         align-items: center;
         justify-content: center;

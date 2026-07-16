@@ -60,17 +60,16 @@
                 <div class="grid-2">
                     <div class="form-group">
                         <label class="form-label"><i class="fas fa-user-tag"></i> Daftar Sebagai</label>
-                        <select name="role" class="form-input" required style="appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.25rem;">
+                        <select name="role" class="form-input" required>
                             <option value="petani" {{ old('role') === 'petani' ? 'selected' : '' }}>Petani / Pelaku Usaha Tani</option>
                             <option value="penjual" {{ old('role') === 'penjual' ? 'selected' : '' }}>Penjual / Toko Sarana Tani</option>
-                            <option value="penyuluh" {{ old('role') === 'penyuluh' ? 'selected' : '' }}>Penyuluh (Ketua Kelompok)</option>
                             <option value="pembeli" {{ old('role') === 'pembeli' ? 'selected' : '' }}>Masyarakat Umum (Pembeli)</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label"><i class="fas fa-map-marker-alt"></i> Lokasi</label>
-                        <select name="location" class="form-input" required style="appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.25rem;">
+                        <select name="location" class="form-input" required>
                             <option value="">Pilih Lokasi</option>
                             <option value="Mojokerto Kota" {{ old('location') === 'Mojokerto Kota' ? 'selected' : '' }}>Mojokerto Kota</option>
                             <option value="Mojosari" {{ old('location') === 'Mojosari' ? 'selected' : '' }}>Mojosari</option>

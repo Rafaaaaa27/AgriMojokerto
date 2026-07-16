@@ -24,8 +24,24 @@ class EducationalInfoController extends Controller
             });
         }
 
-        $infos = $query->paginate(9);
+        $infos = $query->paginate(9)->withQueryString();
         return view('educational.index', compact('infos'));
+    }
+
+    public function manage(Request $request)
+    {
+        $user = auth()->user();
+
+        if ($user->isAdmin()) {
+            $infos = EducationalInfo::with('user')->latest()->paginate(15);
+        } else {
+            $infos = EducationalInfo::with('user')->where('user_id', $user->id)->latest()->paginate(15);
+        }
+
+        $totalViews = EducationalInfo::where('user_id', $user->id)->sum('views');
+        $totalContent = EducationalInfo::where('user_id', $user->id)->count();
+
+        return view('penyuluh.educational', compact('infos', 'totalViews', 'totalContent'));
     }
 
     public function show($id)

@@ -28,18 +28,18 @@ class ScheduleController extends Controller
     // ============ SIMPLE SCHEDULE CRUD (backward compatible) ============
     public function store(Request $request)
     {
-        $request->validate([
+        $request->validateWithBag('simple_schedule', [
             'activity' => 'required|string|max:255',
             'date' => 'required|date',
-            'notes' => 'nullable|string',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
         Schedule::create([
             'user_id' => auth()->id(),
-            'activity' => $request->activity,
+            'activity' => trim($request->activity),
             'date' => $request->date,
             'status' => 'pending',
-            'notes' => $request->notes,
+            'notes' => $request->filled('notes') ? trim($request->notes) : null,
         ]);
 
         return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan.');
@@ -172,6 +172,44 @@ class ScheduleController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Status kegiatan berhasil diperbarui.');
+    }
+
+    public function updateItemDate(Request $request, ScheduleItem $item)
+    {
+        if ($item->user_id !== auth()->id()) abort(403);
+
+        $request->validate(['date' => 'required|date']);
+
+        $item->update(['date' => $request->date]);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'date' => $item->date->format('Y-m-d')]);
+        }
+
+        return redirect()->back()->with('success', 'Tanggal kegiatan berhasil diperbarui.');
+    }
+
+    public function updateItemStage(Request $request, ScheduleItem $item)
+    {
+        if ($item->user_id !== auth()->id()) abort(403);
+
+        $request->validate([
+            'schedule_stage_id' => 'required|exists:schedule_stages,id',
+        ]);
+
+        $newStage = ScheduleStage::findOrFail($request->schedule_stage_id);
+        if ($newStage->farming_cycle_id !== $item->stage->farming_cycle_id) abort(403);
+
+        $item->update([
+            'schedule_stage_id' => $newStage->id,
+            'date' => $request->input('date', $newStage->start_date->format('Y-m-d')),
+        ]);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return redirect()->back()->with('success', 'Kegiatan berhasil dipindahkan.');
     }
 
     public function destroyItem(ScheduleItem $item)

@@ -60,17 +60,11 @@
                     <h3 style="font-weight: 800; margin-bottom: 0.5rem;">Punya pertanyaan lebih lanjut?</h3>
                     <p style="opacity: 0.8;">Diskusikan topik ini bersama para petani lainnya di forum komunitas.</p>
                 </div>
-                <a href="{{ route('forum.index') }}" class="btn" style="background: white; color: var(--primary-dark); padding: 1rem 2.5rem;">Buka Forum Diskusi</a>
+                <a href="{{ route('forum.index') }}" class="btn" style="background: var(--surface); color: var(--primary-dark); padding: 1rem 2.5rem;">Buka Forum Diskusi</a>
             </div>
         </div>
     </div>
 </div>
 
-@push('styles')
-<style>
-.back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-muted); text-decoration: none; font-weight: 700; margin-bottom: 2rem; transition: color 0.3s; }
-.back-link:hover { color: var(--primary); }
-.badge { padding: 0.3rem 1rem; border-radius: 99px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; }
-</style>
-@endpush
+
 @endsection

@@ -1,7 +1,7 @@
 @extends('layouts.native')
 
 @section('content')
-<div class="container" style="padding-top: 8rem; min-height: 100vh;">
+<div class="container" style="padding-top: 8rem; padding-bottom: 4rem; min-height: 100vh;">
     <div style="display: grid; grid-template-columns: 260px 1fr; gap: 2rem; align-items: start;">
         @include('layouts.sidebar')
 
@@ -37,10 +37,10 @@
                     @endif
 
                     @if($user->role === 'petani')
-                    <div class="stat-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; border: 1px solid var(--border-color); height: 100%;">
+                    <div class="stat-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; border: 1px solid var(--border-color); height: 100%;">
                         <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem;">Cuaca Hari Ini</div>
                         <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-                            <i class="fas fa-sun" id="weather-icon-card" style="font-size: 2.2rem; color: #f59e0b;"></i>
+                            <i class="fas fa-sun" id="weather-icon-card" style="font-size: 2.2rem; color: var(--warning);"></i>
                             <span style="font-size: 1.8rem; font-weight: 900; color: var(--primary-dark);" id="weather-temp-card">25°C</span>
                         </div>
                         <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;" id="weather-condition-card">Cerah Berawan</div>
@@ -48,17 +48,17 @@
                     <div class="stat-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; border: 1px solid var(--border-color); height: 100%;">
                         <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem;">Harga Padi</div>
                         <div style="font-size: 1.6rem; font-weight: 900; color: var(--text-main); margin-bottom: 0.25rem;"><span id="price-padi-profile">—</span> <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">/kg</span></div>
-                        <div style="font-size: 0.85rem; font-weight: 700;"><span id="change-padi-profile">—</span></div>
+                        <div style="font-size: 0.85rem; color: var(--primary); font-weight: 700;"><span id="change-padi-profile">—</span></div>
                     </div>
-                    <div class="stat-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; border: 1px solid var(--border-color); height: 100%;">
+                    <div class="stat-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; border: 1px solid var(--border-color); height: 100%;">
                         <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem;">Produksi Bulan Ini</div>
                         <div style="font-size: 1.6rem; font-weight: 900; color: var(--text-main); margin-bottom: 0.25rem;">12,5 <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">ton</span></div>
-                        <div style="font-size: 0.85rem; color: #059669; font-weight: 700;"><i class="fas fa-caret-up"></i> + 8.6%</div>
+                        <div style="font-size: 0.85rem; color: var(--primary); font-weight: 700;"><i class="fas fa-caret-up"></i> + 8.6%</div>
                     </div>
-                    <div class="stat-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; border: 1px solid var(--border-color); height: 100%;">
+                    <div class="stat-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; border: 1px solid var(--border-color); height: 100%;">
                         <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem;">Lahan Aktif</div>
                         <div style="font-size: 1.6rem; font-weight: 900; color: var(--text-main); margin-bottom: 0.25rem;">4 <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Lahan</span></div>
-                        <div style="font-size: 0.85rem; color: #854d0e; font-weight: 700;">Aktif</div>
+                        <div style="font-size: 0.85rem; color: var(--warning); font-weight: 700;">Aktif</div>
                     </div>
                     @endif
 
@@ -91,22 +91,20 @@
 
                 <!-- MARKET PRICE CHARTS - ALL ROLES -->
                 <div style="margin-bottom: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h3 style="font-weight: 800;">Grafik Harga Pasar</h3>
-                        <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Sumber: Dinas Pertanian Mojokerto</span>
+                    <div class="gc-head">
+                        <h3>Grafik Harga Pasar</h3>
+                        <span>60 hari terakhir</span>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                        <div class="glass-card" style="padding: 1.5rem;">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-                                <div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Padi /kg</div>
-                                    <div style="font-size: 1.5rem; font-weight: 900; color: var(--text-main); margin-top: 0.25rem;" id="price-padi-chart">—</div>
-                                </div>
-                                <span id="change-padi-chart" style="font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 99px; background: rgba(5,150,105,0.1); color: #059669;">—</span>
+                    <div class="gc-card" style="border-color: #34d399;">
+                        <div class="gc-top">
+                            <div>
+                                <div class="gc-label"><span class="gc-dot" style="background:#34d399"></span> Padi /kg</div>
+                                <div class="gc-price" id="price-padi-chart">—</div>
                             </div>
-                            <div style="position: relative; height: 170px;">
-                                <canvas id="chartPadiProfile"></canvas>
-                            </div>
+                            <span class="gc-change" id="change-padi-chart">—</span>
+                        </div>
+                        <div class="gc-canvas">
+                            <canvas id="chartPadiProfile"></canvas>
                         </div>
                     </div>
                 </div>
@@ -136,142 +134,279 @@
                 </div>
             </div>
 
+            {{-- PRODUK & ALAT --}}
             @elseif($menu === 'products')
-            <div class="animate-fade">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <div>
-                        <h2 style="font-weight: 800;">Produk & Alat Sewa Saya</h2>
-                        <p style="color: var(--text-muted);">Kelola katalog produk dan alat sewa Anda.</p>
-                    </div>
-                    <div style="display: flex; gap: 1rem;">
-                        <button onclick="openProductModal()" class="btn btn-primary">+ Produk</button>
-                        <button onclick="openEquipmentModal()" class="btn btn-secondary">+ Alat</button>
-                    </div>
+            <div class="pf-section">
+                <div class="pf-head">
+                    <h2 class="pf-title">Produk & Alat Sewa</h2>
+                    <p class="pf-sub">Kelola katalog produk dan alat sewa Anda.</p>
                 </div>
 
-                <!-- Products Grid -->
-                <h3 style="font-weight: 800; margin-top: 2rem; margin-bottom: 1.5rem; color: var(--primary-dark);">{{ $user->role === 'petani' ? 'Hasil Bumi / Panen' : 'Daftar Produk' }}</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3.5rem;">
-                    @forelse($myProducts as $prod)
-                    <div class="glass-card" style="padding: 1.25rem;">
-                        <div style="height: 150px; background: var(--surface-2); border-radius: var(--radius-md); margin-bottom: 1rem; overflow: hidden;">
-                            @if($prod->image_path)
-                            <img src="{{ $prod->image_url }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
-                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #ccc; font-weight: 700; font-size: 0.8rem;">No Image</div>
-                            @endif
-                        </div>
-                        <h4 style="font-weight: 800; margin-bottom: 0.25rem;">{{ $prod->name }}</h4>
-                        <div style="color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">Rp {{ number_format($prod->price, 0, ',', '.') }}</div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; margin-bottom: 1rem;">
-                            @if($user->role === 'petani')
-                            <span style="display: inline-flex; align-items: center; gap: 0.35rem; color: var(--success); font-weight: 700;"><span style="width: 6px; height: 6px; background: var(--success); border-radius: 50%; display: inline-block;"></span> Aktif</span>
-                            @else
-                            <span class="badge {{ $prod->approval_status === 'approved' ? 'badge-success' : 'badge-warning' }}">{{ $prod->approval_status }}</span>
-                            @endif
-                            <span style="color: var(--text-muted);">Stok: {{ $prod->quantity }}</span>
-                        </div>
-                        <div style="display: flex; gap: 0.5rem; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 1rem;">
-                            <button onclick="openProductModal({{ json_encode($prod) }})" class="action-btn-icon" style="font-size:0.8rem; font-weight:700;">Edit</button>
-                            <form action="{{ route('products.destroy', $prod->id) }}" method="POST" onsubmit="return confirm('Hapus produk ini?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="action-btn-icon action-btn-danger" style="font-size:0.8rem; font-weight:700;">Hapus</button>
-                            </form>
-                        </div>
-                    </div>
-                    @empty
-                    <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">Belum ada produk yang diunggah.</div>
-                    @endforelse
+                <div class="pf-tabs">
+                    <button class="pf-tab active" onclick="switchProductsTab('panen')">
+                        <i class="fas fa-seedling"></i> Hasil Panen
+                        <span class="pf-badge">{{ $myProducts->count() }}</span>
+                    </button>
+                    <button class="pf-tab" onclick="switchProductsTab('sewa')">
+                        <i class="fas fa-tools"></i> Alat Sewa
+                        <span class="pf-badge">{{ $myEquipments->count() }}</span>
+                    </button>
                 </div>
 
-                <!-- Equipments Grid -->
-                <h3 style="font-weight: 800; margin-top: 2rem; margin-bottom: 1.5rem; color: var(--primary-dark);">Alat Pertanian Disewakan</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
-                    @forelse($myEquipments as $eq)
-                    <div class="glass-card" style="padding: 1.25rem;">
-                        <div style="height: 150px; background: var(--surface-2); border-radius: var(--radius-md); margin-bottom: 1rem; overflow: hidden;">
-                            @if($eq->image_path)
-                            <img src="{{ $eq->image_url }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
-                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #ccc; font-weight: 700; font-size: 0.8rem;">No Image</div>
-                            @endif
+                <div id="tab-panen" class="pf-tab-content active">
+                    @if($myProducts->count() > 0)
+                    <div class="pf-grid">
+                        @foreach($myProducts as $prod)
+                        <div class="pf-card">
+                            <div class="pf-img">
+                                @if($prod->image_path)
+                                <img src="{{ $prod->image_url }}">
+                                @else
+                                <span>Tanpa Foto</span>
+                                @endif
+                            </div>
+                            <div class="pf-body">
+                                <div class="pf-name">{{ $prod->name }}</div>
+                                <div class="pf-price">Rp {{ number_format($prod->price, 0, ',', '.') }}</div>
+                                <div class="pf-meta">
+                                    <span class="pf-status {{ $user->role === 'petani' ? 'active' : $prod->approval_status }}">
+                                        {{ $user->role === 'petani' ? 'Aktif' : $prod->approval_status }}
+                                    </span>
+                                    <span>Stok: {{ $prod->quantity }}</span>
+                                </div>
+                                <div class="pf-actions">
+                                    <button onclick="openProductModal({{ json_encode($prod) }})" class="pf-btn">Edit</button>
+                                    <form action="{{ route('products.destroy', $prod->id) }}" method="POST" onsubmit="return confirm('Hapus produk ini?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="pf-btn pf-btn-danger">Hapus</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <h4 style="font-weight: 800; margin-bottom: 0.25rem;">{{ $eq->name }}</h4>
-                        <div style="color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">Rp {{ number_format($eq->price, 0, ',', '.') }} / {{ $eq->unit }}</div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; margin-bottom: 1rem;">
-                            @if($user->role === 'petani')
-                            <span style="display: inline-flex; align-items: center; gap: 0.35rem; color: var(--success); font-weight: 700;"><span style="width: 6px; height: 6px; background: var(--success); border-radius: 50%; display: inline-block;"></span> Aktif</span>
-                            @else
-                            <span class="badge {{ $eq->approval_status === 'approved' ? 'badge-success' : 'badge-warning' }}">{{ $eq->approval_status }}</span>
-                            @endif
-                            <span style="color: var(--text-muted);">Jumlah: {{ $eq->quantity }}</span>
-                        </div>
-                        <div style="display: flex; gap: 0.5rem; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 1rem;">
-                            <button onclick="openEquipmentModal({{ json_encode($eq) }})" class="action-btn-icon" style="font-size:0.8rem; font-weight:700;">Edit</button>
-                            <form action="{{ route('equipments.destroy', $eq->id) }}" method="POST" onsubmit="return confirm('Hapus alat sewa ini?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="action-btn-icon action-btn-danger" style="font-size:0.8rem; font-weight:700;">Hapus</button>
-                            </form>
-                        </div>
+                        @endforeach
                     </div>
-                    @empty
-                    <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">Belum ada alat pertanian yang disewakan.</div>
-                    @endforelse
+                    @else
+                    <div class="pf-empty">
+                        <i class="fas fa-seedling"></i>
+                        <h3>Belum ada hasil panen</h3>
+                        <p>Mulai dengan menambahkan produk pertamamu.</p>
+                        <button onclick="openProductModal()" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah Produk</button>
+                    </div>
+                    @endif
+                </div>
+
+                <div id="tab-sewa" class="pf-tab-content">
+                    @if($myEquipments->count() > 0)
+                    <div class="pf-grid">
+                        @foreach($myEquipments as $eq)
+                        <div class="pf-card">
+                            <div class="pf-img">
+                                @if($eq->image_path)
+                                <img src="{{ $eq->image_url }}">
+                                @else
+                                <span>Tanpa Foto</span>
+                                @endif
+                            </div>
+                            <div class="pf-body">
+                                <div class="pf-name">{{ $eq->name }}</div>
+                                <div class="pf-price">Rp {{ number_format($eq->price, 0, ',', '.') }} / {{ $eq->unit }}</div>
+                                <div class="pf-meta">
+                                    <span class="pf-status {{ $user->role === 'petani' ? 'active' : $eq->approval_status }}">
+                                        {{ $user->role === 'petani' ? 'Aktif' : $eq->approval_status }}
+                                    </span>
+                                    <span>Jumlah: {{ $eq->quantity }}</span>
+                                </div>
+                                <div class="pf-actions">
+                                    <button onclick="openEquipmentModal({{ json_encode($eq) }})" class="pf-btn">Edit</button>
+                                    <form action="{{ route('equipments.destroy', $eq->id) }}" method="POST" onsubmit="return confirm('Hapus alat ini?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="pf-btn pf-btn-danger">Hapus</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    @else
+                    <div class="pf-empty">
+                        <i class="fas fa-tools"></i>
+                        <h3>Belum ada alat sewa</h3>
+                        <p>Mulai dengan menambahkan alat pertamamu.</p>
+                        <button onclick="openEquipmentModal()" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah Alat</button>
+                    </div>
+                    @endif
+                </div>
+
+                <div class="pf-fab" id="pfFab">
+                    <button class="btn btn-primary pf-fab-btn" onclick="document.getElementById('pfFab').classList.toggle('open')">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="pf-fab-menu">
+                        <button onclick="openProductModal(); document.getElementById('pfFab').classList.remove('open')">
+                            <i class="fas fa-seedling"></i> Hasil Panen
+                        </button>
+                        <button onclick="openEquipmentModal(); document.getElementById('pfFab').classList.remove('open')">
+                            <i class="fas fa-tools"></i> Alat Sewa
+                        </button>
+                    </div>
                 </div>
             </div>
 
+            {{-- PENJUALAN --}}
             @elseif($menu === 'incoming')
-            <div class="animate-fade">
-                <h2 style="font-weight: 800; margin-bottom: 2rem;">Pesanan Masuk</h2>
-                <div style="display: grid; gap: 1rem;">
-                    @forelse($incomingOrders as $ord)
-                    <div class="glass-card" style="padding: 1.5rem; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 2rem;">
-                        <div>
-                            <div style="font-weight: 800; font-size: 1.1rem;">{{ $ord->product->name }}</div>
-                            <div style="font-size: 0.9rem; color: var(--text-muted);">
-                                <strong>Pembeli:</strong> {{ $ord->buyer_name ?? $ord->user->name }} | <strong>No. HP:</strong> {{ $ord->buyer_phone ?? $ord->user->phone ?? '-' }} | <strong>Harga:</strong> Rp {{ number_format($ord->total_price, 0, ',', '.') }}
-                            </div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
-                                <i class="fas fa-map-marker-alt"></i> {{ $ord->shipping_address }}
-                            </div>
+            <div class="pf-section">
+                <div class="pf-head">
+                    <h2 class="pf-title">Pesanan Masuk</h2>
+                    <p class="pf-sub">Daftar pesanan yang masuk ke toko Anda.</p>
+                </div>
+                @forelse($incomingOrders as $ord)
+                <div class="pf-order">
+                    <div class="pf-order-info">
+                        <div class="pf-order-name">{{ $ord->product->name }}</div>
+                        <div class="pf-order-detail">
+                            {{ $ord->buyer_name ?? $ord->user->name }}
+                            &middot; {{ $ord->buyer_phone ?? $ord->user->phone ?? '-' }}
+                            &middot; Rp {{ number_format($ord->total_price, 0, ',', '.') }}
                         </div>
-                        <span class="badge {{ $ord->status === 'pending' ? 'badge-warning' : 'badge-success' }}">{{ $ord->status }}</span>
+                        <div class="pf-order-addr"><i class="fas fa-map-marker-alt"></i> {{ $ord->shipping_address }}</div>
+                    </div>
+                    <div class="pf-order-end">
+                        <span class="pf-badge {{ $ord->status }}">{{ $ord->status }}</span>
                         @if($ord->status === 'pending')
                         <form action="{{ route('seller.order.update', $ord->id) }}" method="POST">
                             @csrf @method('PATCH')
                             <input type="hidden" name="status" value="completed">
-                            <button type="submit" class="btn btn-primary btn-sm">Selesaikan</button>
+                            <button type="submit" class="pf-btn pf-btn-primary">Selesaikan</button>
                         </form>
                         @endif
                     </div>
+                </div>
+                @empty
+                <div class="pf-empty">
+                    <i class="fas fa-inbox"></i>
+                    <h3>Belum ada pesanan masuk</h3>
+                    <p>Pesanan dari pembeli akan muncul di sini.</p>
+                </div>
+                @endforelse
+            </div>
+
+            {{-- PESANAN SAYA --}}
+            @elseif($menu === 'orders')
+            <div class="pf-section">
+                <div class="pf-head">
+                    <h2 class="pf-title">Pesanan Saya</h2>
+                    <p class="pf-sub">Daftar pesanan barang dan sewa alat yang Anda lakukan.</p>
+                </div>
+
+                <div class="pf-tabs">
+                    <button class="pf-tab active" onclick="switchPesananTab('barang')">
+                        <i class="fas fa-shopping-bag"></i> Pesanan Barang
+                        <span class="pf-badge">{{ $myOrders->count() }}</span>
+                    </button>
+                    <button class="pf-tab" onclick="switchPesananTab('sewa')">
+                        <i class="fas fa-tools"></i> Sewa Alat
+                        <span class="pf-badge">{{ $myBookings->count() }}</span>
+                    </button>
+                </div>
+
+                <div id="tab-pesanan-barang" class="pf-tab-content active">
+                    @forelse($myOrders as $ord)
+                    <div class="pf-order">
+                        <div class="pf-order-info">
+                            <div class="pf-order-name">{{ $ord->product->name }}</div>
+                            <div class="pf-order-detail">
+                                {{ $ord->created_at->format('d M Y') }}
+                                &middot; Rp {{ number_format($ord->total_price, 0, ',', '.') }}
+                                &middot; {{ $ord->seller->name }}
+                            </div>
+                            <div class="pf-order-trace">
+                                <span class="trace-step {{ in_array($ord->status, ['pending','confirmed','completed']) ? 'done' : '' }}">Pesan</span>
+                                <span class="trace-line {{ in_array($ord->status, ['confirmed','completed']) ? 'done' : '' }}"></span>
+                                <span class="trace-step {{ in_array($ord->status, ['confirmed','completed']) ? 'done' : '' }}">Dikonfirmasi</span>
+                                <span class="trace-line {{ $ord->status === 'completed' ? 'done' : '' }}"></span>
+                                <span class="trace-step {{ $ord->status === 'completed' ? 'done' : '' }}">Diterima</span>
+                            </div>
+                        </div>
+                        <div class="pf-order-end">
+                            <span class="pf-status {{ $ord->status }}">{{ $ord->status === 'pending' ? 'Menunggu' : ($ord->status === 'confirmed' ? 'Dikonfirmasi' : ($ord->status === 'completed' ? 'Selesai' : 'Dibatalkan')) }}</span>
+                            @if($ord->status === 'pending')
+                            <form action="{{ route('buyer.order.cancel', $ord->id) }}" method="POST" onsubmit="return confirm('Batalkan pesanan ini?')">
+                                @csrf @method('PATCH')
+                                <button type="submit" class="pf-btn pf-btn-cancel"><i class="fas fa-times"></i> Batalkan</button>
+                            </form>
+                            @elseif($ord->status === 'confirmed')
+                            <form action="{{ route('buyer.order.confirm', $ord->id) }}" method="POST">
+                                @csrf @method('PATCH')
+                                <button type="submit" class="pf-btn pf-btn-primary"><i class="fas fa-check"></i> Terima</button>
+                            </form>
+                            @endif
+                        </div>
+                    </div>
                     @empty
-                    <p style="text-align: center; color: var(--text-muted); padding: 3rem;">Belum ada pesanan masuk.</p>
+                    <div class="pf-empty">
+                        <i class="fas fa-shopping-bag"></i>
+                        <h3>Belum ada pesanan barang</h3>
+                        <p>Anda belum memesan produk apapun dari marketplace.</p>
+                    </div>
+                    @endforelse
+                </div>
+
+                <div id="tab-pesanan-sewa" class="pf-tab-content">
+                    @forelse($myBookings as $book)
+                    <div class="pf-order">
+                        <div class="pf-order-info">
+                            <div class="pf-order-name">{{ $book->equipment->name }}</div>
+                            <div class="pf-order-detail">
+                                {{ $book->created_at->format('d M Y') }}
+                                &middot; Rp {{ number_format($book->total_price, 0, ',', '.') }}
+                                &middot; {{ $book->seller->name }}
+                                @if($book->booking_date)
+                                &middot; {{ \Carbon\Carbon::parse($book->booking_date)->format('d M Y') }}
+                                @endif
+                            </div>
+                            <div class="pf-order-trace">
+                                <span class="trace-step {{ in_array($book->status, ['pending','confirmed','completed']) ? 'done' : '' }}">Sewa</span>
+                                <span class="trace-line {{ in_array($book->status, ['confirmed','completed']) ? 'done' : '' }}"></span>
+                                <span class="trace-step {{ in_array($book->status, ['confirmed','completed']) ? 'done' : '' }}">Dikonfirmasi</span>
+                                <span class="trace-line {{ $book->status === 'completed' ? 'done' : '' }}"></span>
+                                <span class="trace-step {{ $book->status === 'completed' ? 'done' : '' }}">Selesai</span>
+                            </div>
+                        </div>
+                        <div class="pf-order-end">
+                            <span class="pf-status {{ $book->status }}">{{ $book->status === 'pending' ? 'Menunggu' : ($book->status === 'confirmed' ? 'Dikonfirmasi' : ($book->status === 'completed' ? 'Selesai' : 'Dibatalkan')) }}</span>
+                            @if($book->status === 'pending')
+                            <form action="{{ route('buyer.booking.cancel', $book->id) }}" method="POST" onsubmit="return confirm('Batalkan penyewaan ini?')">
+                                @csrf @method('PATCH')
+                                <button type="submit" class="pf-btn pf-btn-cancel"><i class="fas fa-times"></i> Batalkan</button>
+                            </form>
+                            @elseif($book->status === 'confirmed')
+                            <form action="{{ route('buyer.booking.confirm', $book->id) }}" method="POST">
+                                @csrf @method('PATCH')
+                                <button type="submit" class="pf-btn pf-btn-primary"><i class="fas fa-check"></i> Selesai</button>
+                            </form>
+                            @endif
+                        </div>
+                    </div>
+                    @empty
+                    <div class="pf-empty">
+                        <i class="fas fa-tools"></i>
+                        <h3>Belum ada sewa alat</h3>
+                        <p>Anda belum menyewa alat pertanian apapun.</p>
+                    </div>
                     @endforelse
                 </div>
             </div>
 
-            @elseif($menu === 'orders')
-            <div class="animate-fade">
-                <h2 style="font-weight: 800; margin-bottom: 2rem;">Pesanan Saya</h2>
-                <div style="display: grid; gap: 1rem;">
-                    @forelse($myOrders as $ord)
-                    <div class="glass-card" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h4 style="font-weight: 800; margin-bottom: 0.25rem;">{{ $ord->product->name }}</h4>
-                            <div style="font-size: 0.85rem; color: var(--text-muted);">
-                                {{ $ord->created_at->format('d M Y') }} | Rp {{ number_format($ord->total_price, 0, ',', '.') }}
-                            </div>
-                            <div style="font-size: 0.8rem; color: var(--primary); font-weight: 700; margin-top: 0.25rem;">
-                                Penjual: {{ $ord->seller->name }}
-                            </div>
-                        </div>
-                        <span class="badge {{ $ord->status === 'pending' ? 'badge-warning' : 'badge-success' }}">{{ $ord->status }}</span>
-                    </div>
-                    @empty
-                    <p style="text-align: center; color: var(--text-muted); padding: 3rem;">Anda belum melakukan pemesanan.</p>
-                    @endforelse
-                </div>
-            </div>
+            @push('scripts')
+            <script>
+            function switchPesananTab(tab) {
+                document.querySelectorAll('#tab-pesanan-barang, #tab-pesanan-sewa').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.pf-tabs .pf-tab').forEach(el => el.classList.remove('active'));
+                document.getElementById('tab-pesanan-' + tab).classList.add('active');
+                document.querySelector('.pf-tabs .pf-tab' + (tab === 'barang' ? ':first-child' : ':last-child')).classList.add('active');
+            }
+            </script>
+            @endpush
 
             @elseif($menu === 'information')
             <div class="animate-fade">
@@ -314,6 +449,44 @@
             @elseif($menu === 'settings')
             <div class="animate-fade">
                 <h2 style="font-weight: 800; margin-bottom: 2rem;">Pengaturan Akun</h2>
+
+                {{-- Foto Profil --}}
+                <div class="glass-card" style="max-width: 600px; padding: 2.5rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                        <div style="position: relative; flex-shrink: 0;">
+                            <div class="settings-avatar" id="settingsAvatar">
+                                @if($user->photo)
+                                    <img src="{{ $user->photo_url }}" alt="Foto Profil">
+                                @else
+                                    <span>{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-weight: 800; font-size: 1rem; color: var(--text-main);">Foto Profil</div>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0.2rem 0 0.75rem;">JPEG, PNG, atau WebP. Maksimal 2MB.</p>
+                            <form id="photoForm" method="POST" action="{{ route('profile.photo') }}" enctype="multipart/form-data">
+                                @csrf
+                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                    <label class="btn btn-secondary" style="cursor: pointer; padding: 0.55rem 1.25rem; font-size: 0.82rem; border: none;">
+                                        <i class="fas fa-camera"></i> Pilih Foto
+                                        <input type="file" name="photo" accept="image/jpeg,image/png,image/webp" style="display: none;" onchange="document.getElementById('photoForm').submit()">
+                                    </label>
+                                    @if($user->photo)
+                                    <form method="POST" action="{{ route('profile.photo.delete') }}" style="display:inline;" onsubmit="return confirm('Hapus foto profil?')">
+                                        @csrf
+                                        <button type="submit" class="btn" style="padding: 0.55rem 1.25rem; font-size: 0.82rem; border: 1px solid var(--border-color); background: none; color: var(--danger);">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </button>
+                                    </form>
+                                    @endif
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Data Profil --}}
                 <div class="glass-card" style="max-width: 600px; padding: 2.5rem;">
                     @if ($errors->any())
                         <div style="background: rgba(239, 68, 68, 0.1); color: var(--danger); padding: 1rem; border-radius: 10px; margin-bottom: 2rem; font-size: 0.9rem;">
@@ -360,8 +533,8 @@
 <!-- MODALS -->
 @if($user->role === 'penjual' || $user->role === 'petani')
 <div id="modalProduct" class="modal-overlay" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
-    <div class="glass-card modal-content" style="max-width: 540px; padding: 3rem; max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation()">
-        <h3 id="productModalTitle" style="font-weight: 800; margin-bottom: 2rem;">Tambah {{ $user->role === 'petani' ? 'Hasil Panen' : 'Produk Baru' }}</h3>
+    <div class="glass-card modal-content" style="max-width: 540px; padding: 2rem; width: 95%; max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation()">
+        <h3 id="productModalTitle" style="font-weight: 800; margin-bottom: 1.5rem; font-size: 1.15rem;">Tambah {{ $user->role === 'petani' ? 'Hasil Panen' : 'Produk Baru' }}</h3>
         <form id="productForm" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div id="productMethod"></div>
@@ -412,8 +585,8 @@
 </div>
 
 <div id="modalEquipment" class="modal-overlay" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
-    <div class="glass-card modal-content" style="max-width: 540px; padding: 3rem; max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation()">
-        <h3 id="equipmentModalTitle" style="font-weight: 800; margin-bottom: 2rem;">Tambah Alat Sewa</h3>
+    <div class="glass-card modal-content" style="max-width: 540px; padding: 2rem; width: 95%; max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation()">
+        <h3 id="equipmentModalTitle" style="font-weight: 800; margin-bottom: 1.5rem; font-size: 1.15rem;">Tambah Alat Sewa</h3>
         <form id="equipmentForm" action="{{ route('equipments.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div id="equipmentMethod"></div>
@@ -524,43 +697,7 @@
 
 @push('styles')
 <style>
-    .sidebar-link {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 0.85rem 1.25rem;
-        border-radius: 14px;
-        color: var(--text-muted);
-        text-decoration: none;
-        font-weight: 700;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-    .sidebar-link:hover {
-        background: rgba(16, 185, 129, 0.05);
-        color: var(--primary);
-        transform: translateX(5px);
-    }
-    .sidebar-link.active {
-        background: var(--primary);
-        color: white;
-        box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
-    }
-    .sidebar-link i {
-        font-size: 1.1rem;
-        width: 20px;
-    }
-    .badge-dot {
-        position: absolute;
-        right: 1.25rem;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 8px;
-        height: 8px;
-        background: var(--danger);
-        border-radius: 50%;
-        box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
-    }
+
     .stat-card {
         padding: 2rem;
         border-radius: var(--radius-lg);
@@ -595,16 +732,6 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
-    .badge {
-        padding: 0.3rem 1rem;
-        border-radius: 99px;
-        font-weight: 800;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    .badge-success { background: #dcfce7; color: #166534; }
-    .badge-warning { background: #fef9c3; color: #854d0e; }
     
     .modal-overlay {
         position: fixed;
@@ -643,11 +770,48 @@
         outline: none;
         box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
     }
-    .action-btn-icon { background: none; border: none; color: #94a3b8; cursor: pointer; transition: 0.3s; }
-    .action-btn-icon:hover { color: var(--primary) !important; }
+    .action-btn-icon { background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.3s; }
     .action-btn-danger:hover { color: var(--danger) !important; }
-</style>
 
+    .settings-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #fff;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        flex-shrink: 0;
+        box-shadow: 0 4px 16px rgba(5,150,105,0.2);
+    }
+    .settings-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    @media (max-width: 480px) {
+        .modal-content { padding: 1.25rem !important; width: 92% !important; }
+        .modal-content h3 { font-size: 1rem !important; margin-bottom: 1rem !important; }
+        .modal-content div[style*="grid-template-columns: 1fr 1fr"] {
+            grid-template-columns: 1fr !important;
+            gap: 0.75rem !important;
+        }
+        .modal-content .form-input { padding: 0.75rem !important; font-size: 0.9rem !important; }
+        .modal-content .form-label { font-size: 0.72rem !important; }
+        .modal-content div[style*="margin-bottom: 1.5rem"] { margin-bottom: 0.85rem !important; }
+        .modal-content div[style*="margin-bottom: 1rem"] { margin-bottom: 0.75rem !important; }
+        .modal-content div[style*="gap: 0.75rem"] { flex-direction: column !important; }
+        .modal-content div[style*="gap: 0.75rem"] .btn { width: 100% !important; }
+    }
+</style>
+@endpush
+
+@push('scripts')
 <script>
 function openProductModal(data = null) {
     const modal = document.getElementById('modalProduct');
@@ -780,56 +944,109 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Market Price Charts
-    function initMarketChart(canvasId, priceId, changeId, commodity, color, bgColor) {
+    function initMarketChart(canvasId, priceId, changeId, commodity, color) {
+        if (!document.getElementById(canvasId)) return;
         fetch('{{ url("api/market-prices") }}/' + commodity)
             .then(r => r.json())
             .then(data => {
-                document.getElementById(priceId).textContent = 'Rp ' + Number(data.latest).toLocaleString('id-ID');
+                const priceEl = document.getElementById(priceId);
+                if (priceEl) priceEl.textContent = 'Rp ' + Number(data.latest).toLocaleString('id-ID');
                 const changeEl = document.getElementById(changeId);
-                changeEl.textContent = data.changeLabel;
-                changeEl.style.background = data.change >= 0 ? 'rgba(5,150,105,0.1)' : 'rgba(239,68,68,0.1)';
-                changeEl.style.color = data.change >= 0 ? '#10b981' : '#ef4444';
+                if (changeEl) {
+                    changeEl.textContent = data.changeLabel;
+                    const up = data.change >= 0;
+                    changeEl.style.background = up ? 'rgba(5,150,105,0.1)' : 'rgba(239,68,68,0.1)';
+                    changeEl.style.color = up ? '#10b981' : '#ef4444';
+                }
 
-                const ctx = document.getElementById(canvasId).getContext('2d');
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.offsetHeight);
+                gradient.addColorStop(0, color + '25');
+                gradient.addColorStop(1, color + '00');
+
+                const fmtDate = (label) => {
+                    var p = label.split('-');
+                    if (p.length === 3) {
+                        var m = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+                        return p[2] + ' ' + m[parseInt(p[1])-1] + ' ' + p[0];
+                    }
+                    return label;
+                };
+
+                const fmtPrice = (v) => 'Rp' + Number(v).toLocaleString('id-ID');
+
                 new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: data.labels,
                         datasets: [{
-                            label: 'Padi',
                             data: data.prices,
                             borderColor: color,
-                            backgroundColor: bgColor,
-                            borderWidth: 2.5,
+                            backgroundColor: gradient,
+                            borderWidth: 2,
                             fill: true,
                             tension: 0.4,
                             pointRadius: 0,
-                            pointHitRadius: 10,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: color,
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(15,26,31,0.93)',
+                                titleFont: { size: 11, weight: '700' },
+                                bodyFont: { size: 12, weight: '700' },
+                                padding: { x: 12, y: 8 },
+                                cornerRadius: 8,
+                                displayColors: false,
+                                callbacks: {
+                                    title: items => fmtDate(items[0].label),
+                                    label: ctx => fmtPrice(ctx.parsed.y)
+                                }
+                            }
+                        },
                         scales: {
                             x: {
                                 display: true,
                                 grid: { display: false },
-                                ticks: { maxTicksLimit: 5, color: '#637e84', font: { size: 10 }, maxRotation: 0 }
+                                border: { display: false },
+                                ticks: {
+                                    maxTicksLimit: 6,
+                                    color: '#94a3b8',
+                                    font: { size: 9, weight: '500' },
+                                    maxRotation: 0,
+                                    callback: function(v) { return fmtDate(this.getLabelForValue(v)); }
+                                }
                             },
                             y: {
                                 display: true,
-                                grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
-                                ticks: { color: '#637e84', font: { size: 10 }, callback: v => 'Rp' + Number(v).toLocaleString('id-ID') }
+                                grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
+                                border: { display: false },
+                                ticks: {
+                                    color: '#94a3b8',
+                                    font: { size: 9, weight: '500' },
+                                    maxTicksLimit: 5,
+                                    callback: v => fmtPrice(v)
+                                }
                             }
                         },
                         interaction: { intersect: false, mode: 'index' },
+                        animations: { tension: { duration: 1000, easing: 'easeOutQuart' } }
                     }
                 });
             });
     }
 
-    initMarketChart('chartPadiProfile', 'price-padi-chart', 'change-padi-chart', 'padi', '#34d399', 'rgba(52,211,153,0.08)');
+    @if($menu === 'dashboard')
+    initMarketChart('chartPadiProfile', 'price-padi-chart', 'change-padi-chart', 'padi', '#34d399');
 
     // Also update the petani price card
     fetch('{{ url("api/market-prices") }}/padi')
@@ -843,6 +1060,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 changeEl.style.color = data.change >= 0 ? '#10b981' : '#ef4444';
             }
         });
+    @endif
+
+    window.switchProductsTab = function(tab) {
+        document.querySelectorAll('.pf-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.pf-tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.pf-tab')[tab === 'panen' ? 0 : 1].classList.add('active');
+        document.getElementById('tab-' + tab).classList.add('active');
+    };
 });
 </script>
 @endpush

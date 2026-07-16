@@ -97,7 +97,7 @@ class MarketPriceController extends Controller
         }
 
         return response()->json([
-            'labels' => $prices->pluck('date'),
+            'labels' => $prices->pluck('date')->map(fn ($d) => $d->format('Y-m-d')),
             'prices' => $prices->pluck('price'),
             'latest' => $latest?->price ?? 0,
             'change' => $change,

@@ -52,7 +52,37 @@ class DashboardController extends Controller
             $totalEducational = \App\Models\EducationalInfo::count();
             $recentEducational = \App\Models\EducationalInfo::latest()->take(5)->get();
 
-            return view('penyuluh.dashboard', compact('user', 'totalEducational', 'recentEducational'));
+            $totalFarmers = User::where('role', 'petani')->where('is_active', true)->count();
+            $totalMarketPrices = \App\Models\MarketPrice::count();
+            $totalViews = \App\Models\EducationalInfo::sum('views');
+            $recentForumPosts = ForumPost::with('user')->latest()->take(5)->get();
+
+            $latestPrices = [];
+            foreach (\App\Http\Controllers\MarketPriceController::COMMODITIES as $key) {
+                $latest = \App\Models\MarketPrice::where('commodity', $key)->latest('date')->first();
+                $latestPrices[$key] = $latest?->price ?? 0;
+            }
+
+            return view('penyuluh.dashboard', compact(
+                'user', 'totalEducational', 'recentEducational',
+                'totalFarmers', 'totalMarketPrices', 'totalViews',
+                'recentForumPosts', 'latestPrices'
+            ));
+        }
+
+        if ($user->isPenjual()) {
+            $myProducts = Product::where('user_id', $user->id)->get();
+            $incomingOrders = Order::where('seller_id', $user->id)->with(['product', 'user'])->latest()->get();
+            $incomingBookings = Booking::where('seller_id', $user->id)->with(['equipment', 'user'])->latest()->get();
+
+            $stats = [
+                'approved_listings' => $myProducts->where('approval_status', 'approved')->count(),
+                'pending_listings' => $myProducts->where('approval_status', 'pending')->count(),
+                'sales_count' => Order::where('seller_id', $user->id)->where('status', 'completed')->count(),
+                'revenue' => Order::where('seller_id', $user->id)->where('status', 'completed')->sum('total_price'),
+            ];
+
+            return view('seller.dashboard', compact('user', 'incomingOrders', 'incomingBookings', 'stats'));
         }
 
         return redirect()->route('profile.edit');

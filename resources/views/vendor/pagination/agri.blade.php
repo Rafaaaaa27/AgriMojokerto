@@ -73,15 +73,15 @@
 
     <style>
         .pagination-btn { flex: 1; text-align: center; padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; border-radius: 8px; text-decoration: none; transition: all 0.2s; }
-        .pagination-btn-disabled { color: var(--text-muted); background: var(--card-bg); border: 1px solid var(--border); opacity: 0.5; cursor: not-allowed; }
-        .pagination-btn-link { color: var(--text-main); background: var(--card-bg); border: 1px solid var(--border); }
+        .pagination-btn-disabled { color: var(--text-muted); background: var(--surface-2); border: 1px solid var(--border-color); opacity: 0.5; cursor: not-allowed; }
+        .pagination-btn-link { color: var(--text-main); background: var(--surface); border: 1px solid var(--border-color); }
         .pagination-btn-link:hover { border-color: var(--primary); color: var(--primary); }
         .pagination-info { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
         .pagination-info-num { font-weight: 700; }
         .pagination-page { padding: 0.35rem 0.65rem; font-size: 0.75rem; border-radius: 6px; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; min-width: 28px; }
-        .pagination-page-link { color: var(--text-main); background: var(--card-bg); border: 1px solid var(--border); }
+        .pagination-page-link { color: var(--text-main); background: var(--surface); border: 1px solid var(--border-color); }
         .pagination-page-link:hover { border-color: var(--primary); color: var(--primary); }
-        .pagination-page-disabled { color: var(--text-muted); background: var(--card-bg); border: 1px solid var(--border); opacity: 0.5; cursor: not-allowed; }
+        .pagination-page-disabled { color: var(--text-muted); background: var(--surface-2); border: 1px solid var(--border-color); opacity: 0.5; cursor: not-allowed; }
         .pagination-page-active { font-weight: 700; color: #fff; background: var(--primary); border: 1px solid var(--primary); }
         @media (max-width: 639px) { .pagination-desktop { display: none !important; } }
         @media (min-width: 640px) { .pagination-mobile { display: none !important; } }

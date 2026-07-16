@@ -1,8 +1,8 @@
 @extends('layouts.native')
 
 @section('content')
-<div class="container" style="padding-top: 8rem; min-height: 100vh;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
+<div class="container" style="padding-top: 8rem; padding-bottom: 4rem; min-height: 100vh;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h1 style="font-size: 3rem; font-weight: 900; color: var(--primary-dark);">Manajemen Produk</h1>
             <p style="color: var(--text-muted); font-size: 1.1rem;">Total {{ $products->total() }} produk terdaftar dalam marketplace.</p>
@@ -38,7 +38,7 @@
                         <div style="font-weight: 800; color: var(--primary);">Rp {{ number_format($product->price, 0, ',', '.') }}</div>
                     </td>
                     <td style="padding: 1.5rem 2rem;">
-                        <span class="badge {{ $product->approval_status === 'approved' ? 'badge-success' : 'badge-warning' }}">
+                        <span class="badge {{ $product->approval_status === 'approved' ? 'badge-success' : ($product->approval_status === 'rejected' ? 'badge-danger' : 'badge-warning') }}">
                             {{ strtoupper($product->approval_status) }}
                         </span>
                     </td>
@@ -67,11 +67,5 @@
     </div>
 </div>
 
-@push('styles')
-<style>
-    .badge { padding: 0.4rem 0.8rem; border-radius: 8px; font-weight: 900; font-size: 0.65rem; }
-    .badge-success { background: #dcfce7; color: #166534; }
-    .badge-warning { background: #fef9c3; color: #854d0e; }
-</style>
-@endpush
+
 @endsection

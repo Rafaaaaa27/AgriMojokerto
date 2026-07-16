@@ -6,17 +6,13 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -26,6 +22,7 @@ class User extends Authenticatable
         'address',
         'role',
         'is_active',
+        'photo',
     ];
 
     protected function casts(): array
@@ -35,6 +32,11 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function getPhotoUrlAttribute(): string
+    {
+        return $this->photo ? Storage::url($this->photo) : '';
     }
 
     public function isAdmin(): bool
@@ -112,11 +114,6 @@ class User extends Authenticatable
         return $this->hasMany(ScheduleItem::class);
     }
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',

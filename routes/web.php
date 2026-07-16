@@ -56,6 +56,8 @@ Route::middleware(['auth', 'role:petani,pembeli,admin,penyuluh'])->group(functio
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
+    Route::match(['post', 'delete'], '/profile/photo/delete', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/library', [EducationalInfoController::class, 'index'])->name('library.index');
@@ -67,6 +69,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/success', [BookingController::class, 'success'])->name('checkout.success');
 
     Route::post('/notifications/mark-as-read', [DashboardController::class, 'markNotificationsAsRead'])->name('notifications.markAsRead');
+
+    // Buyer order actions
+    Route::patch('/buyer/order/{id}/cancel', [BookingController::class, 'cancelOrder'])->name('buyer.order.cancel');
+    Route::patch('/buyer/order/{id}/confirm', [BookingController::class, 'confirmOrder'])->name('buyer.order.confirm');
+    Route::patch('/buyer/booking/{id}/cancel', [BookingController::class, 'cancelBooking'])->name('buyer.booking.cancel');
+    Route::patch('/buyer/booking/{id}/confirm', [BookingController::class, 'confirmBooking'])->name('buyer.booking.confirm');
 });
 
 // Seller/Petani product & equipment management
@@ -84,7 +92,7 @@ Route::middleware(['auth', 'role:penjual,petani,admin'])->group(function () {
 });
 
 // Petani-specific: harvest & schedule
-Route::middleware(['auth', 'role:petani,admin'])->group(function () {
+Route::middleware(['auth', 'role:petani,penyuluh,admin'])->group(function () {
     Route::get('/harvest', [HarvestController::class, 'index'])->name('harvest.index');
     Route::post('/harvests', [HarvestController::class, 'store'])->name('harvests.store');
     Route::patch('/harvests/{harvest}', [HarvestController::class, 'update'])->name('harvests.update');
@@ -106,6 +114,8 @@ Route::middleware(['auth', 'role:petani,admin'])->group(function () {
     // Schedule Item routes
     Route::post('/schedule-stages/{stage}/items', [ScheduleController::class, 'storeItem'])->name('schedule-items.store');
     Route::patch('/schedule-items/{item}', [ScheduleController::class, 'updateItem'])->name('schedule-items.update');
+    Route::patch('/schedule-items/{item}/date', [ScheduleController::class, 'updateItemDate'])->name('schedule-items.date');
+    Route::patch('/schedule-items/{item}/stage', [ScheduleController::class, 'updateItemStage'])->name('schedule-items.stage');
     Route::delete('/schedule-items/{item}', [ScheduleController::class, 'destroyItem'])->name('schedule-items.destroy');
 });
 
@@ -125,6 +135,7 @@ Route::middleware(['auth', 'role:penyuluh,admin'])->prefix('admin')->group(funct
 
 // Penyuluh: educational content management
 Route::middleware(['auth', 'role:penyuluh,admin'])->group(function () {
+    Route::get('/educational/manage', [EducationalInfoController::class, 'manage'])->name('educational.manage');
     Route::post('/educational-infos', [EducationalInfoController::class, 'store'])->name('educational.store');
     Route::patch('/educational-infos/{educationalInfo}', [EducationalInfoController::class, 'update'])->name('educational.update');
     Route::delete('/educational-infos/{educationalInfo}', [EducationalInfoController::class, 'destroy'])->name('educational.destroy');

@@ -2,12 +2,16 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#059669">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>AgriMojokerto - Modern Agriculture System</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/app.css?v=' . md5_file(public_path('assets/css/app.css'))) }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     @stack('styles')
@@ -26,10 +30,20 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="container nav-content">
+
+            {{-- Left: Hamburger menu (always visible) --}}
+            <div class="nav-left">
+                <button class="nav-hamburger" id="navHamburger" aria-label="Buka menu navigasi">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            {{-- Center: Brand --}}
             <a href="{{ url('/') }}" class="logo">
                 <i class="fas fa-seedling"></i> Agri<span>Mojokerto</span>
             </a>
 
+            {{-- Desktop nav links --}}
             <div class="nav-links">
                 <a href="{{ url('/') }}" class="nav-item {{ Request::is('/') ? 'active' : '' }}">Beranda</a>
                 <a href="{{ route('marketplace.index') }}" class="nav-item {{ Request::is('marketplace*') ? 'active' : '' }}">Marketplace</a>
@@ -38,47 +52,53 @@
                         <a href="{{ route('forum.index') }}" class="nav-item {{ Request::is('forum*') ? 'active' : '' }}">Forum</a>
                     @endif
                     <a href="{{ route('library.index') }}" class="nav-item {{ Request::is('library*') ? 'active' : '' }}">E-Library</a>
+                @endauth
+            </div>
 
-                    <div style="display: flex; align-items: center; gap: 0.25rem;">
-                        <!-- Theme Toggle -->
-                        <button id="themeToggle" class="notification-btn" style="margin: 0;">
-                            <i class="fas fa-moon"></i>
+            {{-- Right actions: theme toggle, notifikasi, profil — always visible --}}
+            <div class="nav-actions">
+                @auth
+                    <button id="themeToggle" class="nav-action-btn" aria-label="Ganti tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+
+                    <div style="position: relative;">
+                        <button class="nav-action-btn" id="notifBtn" title="Notifikasi">
+                            <i class="fas fa-bell"></i>
+                            @if(auth()->user()->unreadNotifications->count() > 0)
+                                <span class="badge">{{ auth()->user()->unreadNotifications->count() }}</span>
+                            @endif
                         </button>
-
-                        <!-- Notification Bell -->
-                        <div style="position: relative;">
-                            <button class="notification-btn" id="notifBtn" title="Notifikasi">
-                                <i class="fas fa-bell"></i>
-                                @if(auth()->user()->unreadNotifications->count() > 0)
-                                    <span class="badge">{{ auth()->user()->unreadNotifications->count() }}</span>
-                                @endif
-                            </button>
-                            <div class="dropdown-menu" id="notifDropdown">
-                                <div class="dropdown-header">
-                                    <span style="font-weight: 800;">Notifikasi</span>
-                                    <button onclick="markAsRead()" class="mark-read-btn">Tandai dibaca</button>
-                                </div>
-                                <div>
-                                    @forelse(auth()->user()->notifications->take(5) as $notification)
-                                        <div class="dropdown-item {{ $notification->read_at ? '' : 'unread' }}">
-                                            <div class="notif-icon"><i class="fas fa-info-circle"></i></div>
-                                            <div class="notif-content">
-                                                <p>{{ $notification->data['message'] ?? '' }}</p>
-                                                <span>{{ $notification->created_at->diffForHumans() }}</span>
-                                            </div>
+                        <div class="dropdown-menu" id="notifDropdown">
+                            <div class="dropdown-header">
+                                <span style="font-weight: 800;">Notifikasi</span>
+                                <button onclick="markAsRead()" class="mark-read-btn">Tandai dibaca</button>
+                            </div>
+                            <div>
+                                @forelse(auth()->user()->notifications->take(5) as $notification)
+                                    <div class="dropdown-item {{ $notification->read_at ? '' : 'unread' }}">
+                                        <div class="notif-icon"><i class="fas fa-info-circle"></i></div>
+                                        <div class="notif-content">
+                                            <p>{{ $notification->data['message'] ?? '' }}</p>
+                                            <span>{{ $notification->created_at->diffForHumans() }}</span>
                                         </div>
-                                    @empty
-                                        <div class="dropdown-item">Belum ada notifikasi.</div>
-                                    @endforelse
-                                </div>
+                                    </div>
+                                @empty
+                                    <div class="dropdown-item">Belum ada notifikasi.</div>
+                                @endforelse
                             </div>
                         </div>
                     </div>
 
-                    <!-- User Profile Dropdown -->
                     <div class="nav-user-wrap">
                         <button class="nav-user-btn" id="userDropdownBtn">
-                            <div class="nav-user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
+                            <div class="nav-user-avatar">
+                                @if(auth()->user()->photo)
+                                    <img src="{{ auth()->user()->photo_url }}" alt="Foto" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                                @else
+                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                @endif
+                            </div>
                             <span class="nav-user-name">{{ explode(' ', auth()->user()->name)[0] }}</span>
                             <i class="fas fa-chevron-down nav-user-chevron"></i>
                         </button>
@@ -86,7 +106,7 @@
                             <div class="dropdown-header">
                                 <span style="font-weight: 800;">Akun {{ ucfirst(auth()->user()->role) }}</span>
                             </div>
-                            <a href="{{ route('dashboard') }}" class="dropdown-item">
+                            <a href="{{ in_array(auth()->user()->role, ['pembeli']) ? route('profile.edit') : route('dashboard') }}" class="dropdown-item">
                                 <i class="fas fa-th-large"></i> Dashboard Saya
                             </a>
                             <a href="{{ route('profile.edit') }}" class="dropdown-item">
@@ -102,13 +122,15 @@
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="nav-item">Masuk</a>
-                    <a href="{{ route('register') }}" class="btn btn-primary">Daftar</a>
+                    <a href="{{ route('login') }}" class="nav-action-btn" aria-label="Masuk">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <a href="{{ route('register') }}" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Daftar</a>
                 @endauth
             </div>
 
-            <!-- Mobile hamburger -->
-            <button class="mobile-toggle" id="mobileToggle">
+            <!-- Mobile hamburger (hidden, replaced by nav-hamburger) -->
+            <button class="mobile-toggle" id="mobileToggle" style="display:none;">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
@@ -131,10 +153,13 @@
                         <a href="{{ route('schedule.index') }}" class="mobile-nav-item">Jadwal Tani</a>
                     @endif
 
-                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                        <button id="mobileThemeToggle" class="mobile-nav-item" style="background: none; border: none; cursor: pointer; width: 100%; text-align: left;">
+                            <i class="fas fa-moon"></i> <span id="mobileThemeLabel">Mode Gelap</span>
+                        </button>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
-                            <button type="submit" class="mobile-nav-item" style="background: none; border: none; color: #ef4444; cursor: pointer;">
+                            <button type="submit" class="mobile-nav-item mobile-nav-logout" style="background: none; border: none; cursor: pointer;">
                                 <i class="fas fa-sign-out-alt"></i> Keluar
                             </button>
                         </form>
@@ -152,59 +177,70 @@
     </main>
 
     <footer class="footer">
-        <div class="footer-grid container">
-            <div class="footer-brand">
-                <a href="{{ url('/') }}" class="footer-logo">
-                    <i class="fas fa-seedling"></i> Agri<span>Mojokerto</span>
-                </a>
-                <p class="footer-desc">Platform digital untuk kemandirian pangan dan kesejahteraan petani Mojokerto.</p>
-            </div>
-            <div class="footer-col">
-                <h4 class="footer-heading">Navigasi</h4>
-                <ul class="footer-links">
-                    <li><a href="{{ route('marketplace.index') }}" class="footer-link">Pasar Tani</a></li>
+        <div class="footer-accent"></div>
+        <div class="footer-inner container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="{{ url('/') }}" class="footer-logo">
+                        <i class="fas fa-seedling"></i> AgriMojokerto
+                    </a>
+                    <p class="footer-tagline">Kemandirian pangan untuk petani Mojokerto.</p>
+                </div>
+                <div class="footer-nav">
+                    <a href="{{ route('marketplace.index') }}" class="footer-link">Pasar Tani</a>
+                    <span class="footer-dot"></span>
                     @if(!auth()->check() || auth()->user()->role !== 'penjual')
-                        <li><a href="{{ route('forum.index') }}" class="footer-link">Forum Diskusi</a></li>
+                        <a href="{{ route('forum.index') }}" class="footer-link">Forum</a>
+                        <span class="footer-dot"></span>
                     @endif
-                    <li><a href="{{ route('library.index') }}" class="footer-link">E-Library</a></li>
-                </ul>
+                    <a href="{{ route('library.index') }}" class="footer-link">E-Library</a>
+                </div>
+                <div class="footer-contact">
+                    <a href="mailto:info@agrimojokerto.id" class="footer-link"><i class="far fa-envelope"></i> info@agrimojokerto.id</a>
+                    <a href="tel:+0321123456" class="footer-link"><i class="fas fa-phone-alt"></i> (0321) 123-456</a>
+                </div>
             </div>
-            <div class="footer-col">
-                <h4 class="footer-heading">Hubungi Kami</h4>
-                <ul class="footer-contact">
-                    <li><i class="fas fa-map-marker-alt"></i> Jl. Ahmad Yani No. 1, Mojokerto</li>
-                    <li><i class="fas fa-envelope"></i> info@agrimojokerto.id</li>
-                    <li><i class="fas fa-phone"></i> (0321) 123-456</li>
-                </ul>
+            <div class="footer-bottom">
+                &copy; {{ date('Y') }} AgriMojokerto
             </div>
-        </div>
-        <div class="footer-bottom container">
-            &copy; {{ date('Y') }} AgriMojokerto. <span class="footer-heart"><i class="fas fa-heart"></i></span> Untuk Petani Mojokerto.
         </div>
     </footer>
 
     <script>
         // Dark Mode Logic
         const themeToggle = document.getElementById('themeToggle');
+        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+        const mobileThemeLabel = document.getElementById('mobileThemeLabel');
         const body = document.documentElement;
         const icon = themeToggle?.querySelector('i');
+        const mobileIcon = mobileThemeToggle?.querySelector('i');
 
-        if (localStorage.getItem('theme') === 'dark') {
-            body.setAttribute('data-theme', 'dark');
-            if(icon) icon.classList.replace('fa-moon', 'fa-sun');
-        }
-
-        themeToggle?.addEventListener('click', () => {
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-                if(icon) icon.classList.replace('fa-sun', 'fa-moon');
-            } else {
+        function setTheme(isDark) {
+            if (isDark) {
                 body.setAttribute('data-theme', 'dark');
                 localStorage.setItem('theme', 'dark');
-                if(icon) icon.classList.replace('fa-moon', 'fa-sun');
+                if(icon) { icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); }
+                if(mobileIcon) { mobileIcon.classList.remove('fa-moon'); mobileIcon.classList.add('fa-sun'); }
+                if(mobileThemeLabel) mobileThemeLabel.textContent = 'Mode Terang';
+            } else {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                if(icon) { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); }
+                if(mobileIcon) { mobileIcon.classList.remove('fa-sun'); mobileIcon.classList.add('fa-moon'); }
+                if(mobileThemeLabel) mobileThemeLabel.textContent = 'Mode Gelap';
             }
-        });
+        }
+
+        if (localStorage.getItem('theme') === 'dark') {
+            setTheme(true);
+        }
+
+        function toggleTheme() {
+            setTheme(body.getAttribute('data-theme') !== 'dark');
+        }
+
+        themeToggle?.addEventListener('click', toggleTheme);
+        mobileThemeToggle?.addEventListener('click', toggleTheme);
 
         // Notification Dropdown
         const notifBtn = document.getElementById('notifBtn');
@@ -230,13 +266,34 @@
             document.addEventListener('click', () => userDropdown?.classList.remove('show'));
         }
 
-        // Mobile Menu
-        document.getElementById('mobileToggle')?.addEventListener('click', () => {
-            document.getElementById('mobileMenu').classList.add('show');
-        });
-        document.getElementById('mobileClose')?.addEventListener('click', () => {
-            document.getElementById('mobileMenu').classList.remove('show');
-        });
+        // Mobile Menu — hamburger opens sidebar if available, otherwise falls back to mobile menu
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileClose = document.getElementById('mobileClose');
+        const mobileSidebarPanel = document.getElementById('mobileSidebarPanel');
+        const mobileSidebarOverlay = document.getElementById('mobileSidebarOverlay');
+        const navHamburger = document.getElementById('navHamburger');
+
+        if (navHamburger) {
+            navHamburger.addEventListener('click', () => {
+                if (mobileSidebarPanel) {
+                    mobileSidebarPanel.classList.add('show');
+                    if (mobileSidebarOverlay) mobileSidebarOverlay.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    mobileMenu?.classList.add('show');
+                }
+            });
+        } else {
+            document.getElementById('mobileToggle')?.addEventListener('click', () => {
+                mobileMenu?.classList.add('show');
+            });
+        }
+
+        if (mobileClose) {
+            mobileClose.addEventListener('click', () => {
+                mobileMenu?.classList.remove('show');
+            });
+        }
 
         // Toast System
         function showToast(title, message, type = 'success') {
@@ -315,14 +372,15 @@
             });
         });
 
-        // Theme toggle animation class (applied after first handler fires)
-        const origToggle = themeToggle?.click;
-        if (themeToggle) {
-            themeToggle.addEventListener('click', function() {
-                this.classList.add('switching');
-                setTimeout(() => this.classList.remove('switching'), 400);
-            });
-        }
+        // Theme toggle animation class
+        [themeToggle, mobileThemeToggle].forEach(btn => {
+            if (btn) {
+                btn.addEventListener('click', function() {
+                    this.classList.add('switching');
+                    setTimeout(() => this.classList.remove('switching'), 400);
+                });
+            }
+        });
 
         // Navbar scroll effect
         const navbar = document.querySelector('.navbar');

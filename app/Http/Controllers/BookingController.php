@@ -132,4 +132,70 @@ class BookingController extends Controller
 
         return redirect()->back()->with('success', 'Status penyewaan berhasil diperbarui.');
     }
+
+    // ========== BUYER ACTIONS ==========
+
+    public function cancelOrder($id)
+    {
+        $order = Order::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->with('product')
+            ->firstOrFail();
+
+        if ($order->status !== 'pending') {
+            return redirect()->back()->with('error', 'Pesanan yang sudah diproses tidak dapat dibatalkan.');
+        }
+
+        $order->product->increment('quantity', $order->quantity);
+        $order->update(['status' => 'cancelled']);
+
+        return redirect()->back()->with('success', 'Pesanan berhasil dibatalkan.');
+    }
+
+    public function confirmOrder($id)
+    {
+        $order = Order::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        if ($order->status !== 'confirmed') {
+            return redirect()->back()->with('error', 'Pesanan sudah dikonfirmasi sebelumnya.');
+        }
+
+        $order->update(['status' => 'completed']);
+
+        return redirect()->back()->with('success', 'Pesanan telah diterima. Terima kasih!');
+    }
+
+    public function cancelBooking($id)
+    {
+        $booking = Booking::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->with('equipment')
+            ->firstOrFail();
+
+        if ($booking->status !== 'pending') {
+            return redirect()->back()->with('error', 'Penyewaan yang sudah diproses tidak dapat dibatalkan.');
+        }
+
+        $booking->equipment->increment('quantity', $booking->quantity);
+        $booking->update(['status' => 'cancelled']);
+
+        return redirect()->back()->with('success', 'Penyewaan berhasil dibatalkan.');
+    }
+
+    public function confirmBooking($id)
+    {
+        $booking = Booking::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        if ($booking->status !== 'confirmed') {
+            return redirect()->back()->with('error', 'Penyewaan sudah dikonfirmasi sebelumnya.');
+        }
+
+        $booking->update(['status' => 'completed']);
+
+        return redirect()->back()->with('success', 'Penyewaan selesai. Terima kasih!');
+    }
 }

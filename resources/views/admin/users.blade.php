@@ -1,8 +1,8 @@
 @extends('layouts.native')
 
 @section('content')
-<div class="container" style="padding-top: 8rem; min-height: 100vh;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
+<div class="container" style="padding-top: 8rem; padding-bottom: 4rem; min-height: 100vh;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h1 style="font-size: 3rem; font-weight: 900; color: var(--primary-dark);">Manajemen Pengguna</h1>
             <p style="color: var(--text-muted); font-size: 1.1rem;">Total {{ $users->total() }} akun terdaftar dalam sistem.</p>
@@ -55,9 +55,9 @@
                     </td>
                     <td style="padding: 1.5rem 2rem;">
                         @if($user->is_active)
-                            <span class="badge" style="background: #dcfce7; color: #166534;">AKTIF</span>
+                            <span class="badge badge-success">AKTIF</span>
                         @else
-                            <span class="badge" style="background: #fee2e2; color: #991b1b;">NON-AKTIF</span>
+                            <span class="badge badge-danger">NON-AKTIF</span>
                         @endif
                     </td>
                     <td style="padding: 1.5rem 2rem;">
@@ -83,7 +83,6 @@
 
 @push('styles')
 <style>
-    .badge { padding: 0.4rem 0.8rem; border-radius: 8px; font-weight: 900; font-size: 0.65rem; }
     .btn-sm { padding: 0.5rem 1rem; font-size: 0.8rem; }
 </style>
 @endpush

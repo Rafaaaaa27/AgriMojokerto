@@ -1,7 +1,7 @@
 @extends('layouts.native')
 
 @section('content')
-<div class="container" style="padding-top: 7rem;">
+<div class="container" style="padding-top: 8rem; padding-bottom: 4rem;">
     <div class="pen-layout">
         @include('layouts.sidebar')
 
@@ -9,7 +9,7 @@
 
             {{-- HEADER --}}
             <div class="pen-header">
-                <div class="pen-header-icon">🌾</div>
+                <div class="pen-header-icon"><i class="fas fa-seedling" style="color: white;"></i></div>
                 <div>
                     <h1 class="pen-title">Dashboard Penyuluh</h1>
                     <p class="pen-desc">Pantau harga pasar dan kelola informasi edukasi.</p>
@@ -24,16 +24,34 @@
                     </div>
                     <div>
                         <div class="pen-stat-label">Harga Pasar</div>
-                        <div class="pen-stat-value">Kelola harga komoditas</div>
+                        <div class="pen-stat-value">{{ number_format($totalMarketPrices) }} data harga</div>
                     </div>
                 </a>
-                <a href="{{ route('library.index') }}" class="pen-stat-card">
+                <a href="{{ route('educational.manage') }}" class="pen-stat-card">
                     <div class="pen-stat-icon pen-stat-icon-blue">
                         <i class="fas fa-bullhorn"></i>
                     </div>
                     <div>
-                        <div class="pen-stat-label">Sosialisasi & Info</div>
-                        <div class="pen-stat-value">{{ $totalEducational }} konten edukasi</div>
+                        <div class="pen-stat-label">Konten Edukasi</div>
+                        <div class="pen-stat-value">{{ $totalEducational }} konten &middot; {{ number_format($totalViews) }} pembaca</div>
+                    </div>
+                </a>
+                <div class="pen-stat-card" style="cursor: default;">
+                    <div class="pen-stat-icon pen-stat-icon-orange">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <div class="pen-stat-label">Petani Terdaftar</div>
+                        <div class="pen-stat-value">{{ number_format($totalFarmers) }} petani aktif</div>
+                    </div>
+                </div>
+                <a href="{{ route('forum.index') }}" class="pen-stat-card">
+                    <div class="pen-stat-icon pen-stat-icon-purple">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div>
+                        <div class="pen-stat-label">Forum Diskusi</div>
+                        <div class="pen-stat-value">Pantau diskusi petani</div>
                     </div>
                 </a>
             </div>
@@ -109,14 +127,14 @@
                         <i class="fas fa-bullhorn"></i>
                         <h3>Konten Edukasi Terbaru</h3>
                     </div>
-                    <a href="{{ route('profile.edit', ['menu' => 'information']) }}" class="pen-edukasi-link">Kelola <i class="fas fa-arrow-right"></i></a>
+                    <a href="{{ route('educational.manage') }}" class="pen-edukasi-link">Kelola <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="pen-edukasi-list">
                     @forelse($recentEducational as $edu)
                     <div class="pen-edukasi-item">
                         <div>
                             <div class="pen-edukasi-item-title">{{ $edu->title }}</div>
-                            <div class="pen-edukasi-item-date">{{ $edu->created_at->diffForHumans() }}</div>
+                            <div class="pen-edukasi-item-date">{{ $edu->created_at->diffForHumans() }} &middot; {{ number_format($edu->views) }} dibaca</div>
                         </div>
                         <span class="pen-edukasi-item-badge">{{ $edu->category }}</span>
                     </div>
@@ -124,7 +142,34 @@
                     <div class="pen-edukasi-empty">
                         <i class="fas fa-bullhorn"></i>
                         <p>Belum ada konten edukasi</p>
-                        <a href="{{ route('profile.edit', ['menu' => 'information']) }}" class="btn btn-primary btn-sm">Buat Konten</a>
+                        <a href="{{ route('educational.manage') }}" class="btn btn-primary btn-sm">Buat Konten</a>
+                    </div>
+                    @endforelse
+                </div>
+            </div>
+
+            {{-- FORUM POSTS TERBARU --}}
+            <div class="glass-card pen-edukasi">
+                <div class="pen-edukasi-head">
+                    <div class="pen-edukasi-title">
+                        <i class="fas fa-comments" style="color: #8b5cf6;"></i>
+                        <h3>Diskusi Forum Terbaru</h3>
+                    </div>
+                    <a href="{{ route('forum.index') }}" class="pen-edukasi-link">Lihat Semua <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="pen-edukasi-list">
+                    @forelse($recentForumPosts as $post)
+                    <div class="pen-edukasi-item">
+                        <div>
+                            <div class="pen-edukasi-item-title">{{ $post->title }}</div>
+                            <div class="pen-edukasi-item-date">{{ $post->user->name }} &middot; {{ $post->created_at->diffForHumans() }}</div>
+                        </div>
+                        <span style="font-size: 0.65rem; color: var(--text-muted);">{{ $post->replies_count ?? 0 }} balasan</span>
+                    </div>
+                    @empty
+                    <div class="pen-edukasi-empty">
+                        <i class="fas fa-comments"></i>
+                        <p>Belum ada diskusi di forum</p>
                     </div>
                     @endforelse
                 </div>
@@ -138,16 +183,18 @@
 <style>
 .pen-layout { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; align-items: start; }
 .pen-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
-.pen-header-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 16px rgba(5,150,105,0.2); flex-shrink: 0; }
+
 .pen-title { font-size: 1.6rem; font-weight: 900; color: var(--text-main); letter-spacing: -0.02em; }
 .pen-desc { color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.15rem; }
 
-.pen-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-bottom: 2.5rem; }
+.pen-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2.5rem; }
 .pen-stat-card { text-decoration: none; display: block; background: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; transition: all 0.35s cubic-bezier(0.22,1,0.36,1); }
 .pen-stat-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.06); }
 .pen-stat-icon { width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
 .pen-stat-icon-green { background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.04)); color: var(--primary); }
 .pen-stat-icon-blue { background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(59,130,246,0.04)); color: #3b82f6; }
+.pen-stat-icon-orange { background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.04)); color: #f59e0b; }
+.pen-stat-icon-purple { background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(139,92,246,0.04)); color: #8b5cf6; }
 .pen-stat-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
 .pen-stat-value { font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-top: 0.15rem; }
 
@@ -196,6 +243,32 @@
 .pen-harga-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(5,150,105,0.25); }
 .pen-harga-btn i { font-size: 0.7rem; }
 
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .pen-chart-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 680px) {
+    .pen-header { gap: 0.75rem; margin-bottom: 2rem; }
+    .pen-header-icon {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 1.1rem !important;
+        flex-shrink: 0;
+    }
+    .pen-title { font-size: 1.2rem; }
+    .pen-desc { font-size: 0.8rem; }
+    .pen-stats { grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .pen-section { margin-bottom: 2rem; }
+    .pen-chart-card { padding: 1rem; }
+}
+
+@media (max-width: 480px) {
+    .pen-harga-grid { grid-template-columns: 1fr; }
+    .pen-section-head { flex-wrap: wrap; row-gap: 0.4rem; }
+    .pen-section-source { margin-left: 0; width: 100%; }
+}
+
 </style>
 @endpush
 
@@ -212,10 +285,21 @@ function initMarketChart(canvasId, priceId, changeId, commodity, color) {
             changeEl.style.background = up ? 'rgba(5,150,105,0.1)' : 'rgba(239,68,68,0.1)';
             changeEl.style.color = up ? '#10b981' : '#ef4444';
 
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            const gradient = ctx.createLinearGradient(0, 0, 0, 155);
-            gradient.addColorStop(0, color + '33');
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.offsetHeight);
+            gradient.addColorStop(0, color + '25');
             gradient.addColorStop(1, color + '00');
+
+            const fmtDate = (label) => {
+                var p = label.split('-');
+                if (p.length === 3) {
+                    var m = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+                    return p[2] + ' ' + m[parseInt(p[1])-1] + ' ' + p[0];
+                }
+                return label;
+            };
+            const fmtPrice = (v) => 'Rp' + Number(v).toLocaleString('id-ID');
 
             new Chart(ctx, {
                 type: 'line',
@@ -225,11 +309,14 @@ function initMarketChart(canvasId, priceId, changeId, commodity, color) {
                         data: data.prices,
                         borderColor: color,
                         backgroundColor: gradient,
-                        borderWidth: 2.5,
+                        borderWidth: 2,
                         fill: true,
-                        tension: 0.35,
+                        tension: 0.4,
                         pointRadius: 0,
-                        pointHitRadius: 8,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: color,
+                        pointHoverBorderColor: '#fff',
+                        pointHoverBorderWidth: 2,
                     }]
                 },
                 options: {
@@ -238,18 +325,21 @@ function initMarketChart(canvasId, priceId, changeId, commodity, color) {
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: 'rgba(15,26,31,0.92)',
+                            backgroundColor: 'rgba(15,26,31,0.93)',
                             titleFont: { size: 11, weight: '700' },
-                            bodyFont: { size: 12, weight: '600' },
+                            bodyFont: { size: 12, weight: '700' },
                             padding: { x: 12, y: 8 },
                             cornerRadius: 8,
                             displayColors: false,
-                            callbacks: { label: ctx => 'Rp ' + Number(ctx.parsed.y).toLocaleString('id-ID') }
+                            callbacks: {
+                                title: items => fmtDate(items[0].label),
+                                label: ctx => fmtPrice(ctx.parsed.y)
+                            }
                         }
                     },
                     scales: {
-                        x: { display: true, grid: { display: false }, border: { display: false }, ticks: { maxTicksLimit: 5, color: '#637e84', font: { size: 9, weight: '500' }, maxRotation: 0 } },
-                        y: { display: true, grid: { color: 'rgba(255,255,255,0.03)', drawBorder: false }, border: { display: false }, ticks: { color: '#637e84', font: { size: 9, weight: '500' }, maxTicksLimit: 5, callback: v => 'Rp' + Number(v).toLocaleString('id-ID') } }
+                        x: { display: true, grid: { display: false }, border: { display: false }, ticks: { maxTicksLimit: 6, color: '#94a3b8', font: { size: 9, weight: '500' }, maxRotation: 0, callback: function(v) { return fmtDate(this.getLabelForValue(v)); } } },
+                        y: { display: true, grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false }, border: { display: false }, ticks: { color: '#94a3b8', font: { size: 9, weight: '500' }, maxTicksLimit: 5, callback: v => fmtPrice(v) } }
                     },
                     interaction: { intersect: false, mode: 'index' },
                     animations: { tension: { duration: 1000, easing: 'easeOutQuart' } }

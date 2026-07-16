@@ -95,7 +95,7 @@ class EquipmentController extends Controller
 
     public function destroy(Equipment $equipment)
     {
-        if ($equipment->user_id !== auth()->id()) {
+        if ($equipment->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
             abort(403);
         }
 
